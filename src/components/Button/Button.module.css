@@ -1,0 +1,34 @@
+.gameStartButton {
+  margin-top: 40px;
+  padding: 10px 30px;
+  background-color: var(--red-main);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+	transition: all 0.3s ease;;
+}
+
+.gameStartButton:hover {
+  background-color: var(--red-secondary);
+}
+
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--red-glow), 0 0 30px var(--red-glow);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow);
+  }
+}
+
+.gameStartButton {
+	animation: pulsate 1.5s infinite;
+}

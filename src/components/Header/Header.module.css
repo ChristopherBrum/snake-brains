@@ -1,0 +1,61 @@
+#titleContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#headshot {
+	width: 180px;
+	margin-top: 30px;
+}
+
+#title {
+	font-family: 'Gloomy';
+	font-size: 8rem;
+	color: var(--green-main);
+	letter-spacing: 0.8rem;
+	text-align: center;
+	padding: 30px 0;
+}
+
+#subTitle {
+	font-family: 'BrightSunshine';
+	font-size: 2.3rem;
+	color: var(--red-main);
+	transform: rotate(-15deg);
+}
+
+
+@keyframes rotateImage {
+  0% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(5deg);
+    easing: ease-in;
+  }
+  60% {
+    transform: rotate(-5deg);
+    easing: ease-out;
+  }
+  85% {
+    transform: rotate(8deg);
+    easing: ease-in-out;
+  }
+  100% {
+    transform: rotate(-2deg);
+    easing: ease-in-out;
+  }
+}
+
+#headshot {
+  animation: rotateImage 3s infinite;
+  transform-origin: center; 
+}
+
+.title {
+  font-family: 'Aerologic';
+  font-size: 6rem;
+  color: var(--green-main);
+  letter-spacing: 1rem;
+}

@@ -1,0 +1,81 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  --green-main: #49D49D;
+  --dark-main: #131313;
+  --dark-dark: #010101;
+  --red-main: #E83151;
+  --red-glow: #ff007f;
+  --red-secondary: #e8314fb4;
+  --yellow-main: #FFD275;
+  --light-main: #FFFBFA;
+}
+html,
+body,
+#root {
+  height: 100vh;
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+#root,
+#__next {
+  isolation: isolate;
+}
+
+:root {
+  font-family: monospace;
+
+  color-scheme: light dark;
+  background-color: var(--dark-main);
+  color: var(--light-main);
+  font-size: 16px;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'Aerologic';
+  src: url(./fonts/AerologicaRegular-K7day.ttf) format('truetype')
+}
+
+@font-face {
+  font-family: 'BrightSunshine';
+  src: url(./fonts/BrightSunshineDemo-7BvgD.ttf) format('truetype')
+}
+
+@font-face {
+  font-family: 'Gloomy';
+  src: url(./fonts/GloomyThings-3zBv3.ttf) format('truetype')
+}
