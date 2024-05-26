@@ -1,8 +1,8 @@
-import { useState } from "react";
 import "./App.css";
+import { useState } from "react";
 import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
-import Board from "./components/Game/Game";
+import Game from "./components/Game/Game.tsx";
 import Instruction from "./components/Instruction/Instruction";
 
 function App() {
@@ -16,16 +16,14 @@ function App() {
   };
 
   if (instructions) {
-    return (
-      <Instruction setInstructions={setInstructions}/>
-    )
+    return <Instruction setInstructions={setInstructions} />;
   }
 
   return (
     <>
       <Header />
       {gameStart ? (
-        <Board size={size} level={level} />
+        <Game size={size} level={level} />
       ) : (
         <Controls
           size={size}

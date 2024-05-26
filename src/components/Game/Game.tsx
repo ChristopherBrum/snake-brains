@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect } from "react";
 import brainImage from "../../assets/brain.png";
 
-const BASELINE_MOVEMENT_INTERVAL = 800;
+const BASELINE_MOVEMENT_INTERVAL = 500;
 const BRAINS_FOR_LEVEL_UP = 10;
 
 type GameProps = {
@@ -10,22 +11,23 @@ type GameProps = {
 };
 
 const Game = ({ size, level }: GameProps) => {
-  const [snake, setSnake] = useState<number[][]>([]);
+  // const [snake, setSnake] = useState<number[][]>([]);
   const [brain, setBrain] = useState<number[]>([]);
   const [direction, setDirection] = useState<string>("");
   const [score, setScore] = useState<number>(0);
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [currentLevel, setCurrentLevel] = useState<number>(level);
 
-  const board = useRef<HTMLDivElement>(null);
+  const snakeRef = useRef<number[][]>([]);
+  const boardRef = useRef<HTMLDivElement>(null);
   //////// GAME SETUP START ////////
 
   /* set up board, plus snake and brain starting points, then activate game  */
   useEffect(() => {
     buildBoard();
     setGamePieces();
-    if (board.current) {
-      board.current.focus();
+    if (boardRef.current) {
+      boardRef.current.focus();
       setGameActive(true);
     }
   }, []);
@@ -33,7 +35,6 @@ const Game = ({ size, level }: GameProps) => {
   /* after game activated, determine starting direction of snake */
   useEffect(() => {
     if (gameActive) {
-      console.log("gameActive:", gameActive);
       setStartingDirection();
     }
   }, [gameActive]);
@@ -52,12 +53,8 @@ const Game = ({ size, level }: GameProps) => {
   useEffect(() => {
     const newIntervalTime = BASELINE_MOVEMENT_INTERVAL - currentLevel * 50;
 
-    let num = 0;
     const newIntervalId = setInterval(() => {
-      // moveSnake()
-      // call a method to move the snake
-      num += 1;
-      console.log("current interval", num, "direction:", direction);
+      moveSnake();
     }, newIntervalTime);
 
     return () => {
@@ -66,8 +63,8 @@ const Game = ({ size, level }: GameProps) => {
   }, [currentLevel, direction]);
 
   const buildBoard = () => {
-    if (board.current) {
-      board.current.innerHTML = "";
+    if (boardRef.current) {
+      boardRef.current.innerHTML = "";
 
       for (let i = 0; i < size; i++) {
         const newRow = document.createElement("div");
@@ -79,31 +76,31 @@ const Game = ({ size, level }: GameProps) => {
           square.setAttribute("data-col-id", j.toString());
           newRow.appendChild(square);
         }
-        board.current.appendChild(newRow);
+        boardRef.current.appendChild(newRow);
       }
     }
   };
 
   const setGamePieces = (): void => {
-    if (!board.current) handleCustomError("Error setting game board");
+    if (!boardRef.current) handleCustomError("Error setting game board");
     const [snakeRow, snakeCol] = findRandomCoordinates();
     const snakeTarget = findSquareElement(snakeRow, snakeCol);
     const [brainRow, brainCol] = findRandomCoordinates();
     const brainTarget = findSquareElement(brainRow, brainCol);
 
-    if (squaresAreTheSame(snakeRow, snakeCol, brainRow, brainCol)) {
+    if (squaresAreTheSame(snakeRow, snakeCol)) {
       setGamePieces();
     } else if (snakeTarget && brainTarget) {
       snakeTarget.classList.add("snake");
       snakeTarget.classList.add("head");
       brainTarget.classList.add("brain");
-      setSnake([[snakeRow, snakeCol]]);
+      snakeRef.current = [[snakeRow, snakeCol]];
       setBrain([brainRow, brainCol]);
     }
   };
 
   const setStartingDirection = () => {
-    const [snakeRow, snakeCol] = snake[0];
+    const [snakeRow, snakeCol] = snakeRef.current[0];
     if (validDirection(snakeRow - 1, snakeCol)) {
       setDirection("UP");
     } else if (validDirection(snakeRow + 1, snakeCol)) {
@@ -120,6 +117,53 @@ const Game = ({ size, level }: GameProps) => {
   const handleCustomError = (message: string) => {
     throw new Error(message);
   };
+  //////// ERROR HANDLING END ////////
+
+  //////// VALIDATION START ////////
+  const invalidSquare = (rowId: number, colId: number) => {
+    return rowId < 0 || rowId >= size || colId < 0 || colId >= size;
+  };
+
+  const squareIsOccupied = (rowId: number, colId: number) => {
+    const occupied = snakeRef.current.some((coordinates) => {
+      return coordinates[0] === rowId && coordinates[1] === colId;
+    });
+
+    return occupied || (brain[0] === rowId && brain[1] === colId);
+  };
+
+  const squaresAreTheSame = (
+    snakeRow: number,
+    snakeCol: number
+  ) => {
+    const [brainRow, brainCol] = brain;
+    return snakeRow === brainRow && snakeCol === brainCol;
+  };
+
+  const validDirection = (snakeRow: number, snakeCol: number) => {
+    const sameAsBrain = squaresAreTheSame(snakeRow, snakeCol);
+    const invalid = invalidSquare(snakeRow, snakeCol);
+
+    return !sameAsBrain && !invalid;
+  };
+  //////// ERROR HANDLING END ////////
+
+  //////// UI UPDATE START ////////
+  const findNextCoordinates = () => {
+    let [rowId, colId] = snakeRef.current[0];
+
+    if (direction === "UP") {
+      rowId -= 1;
+    } else if (direction === "DOWN") {
+      rowId += 1;
+    } else if (direction === "LEFT") {
+      colId -= 1;
+    } else if (direction === "RIGHT") {
+      colId += 1;
+    }
+
+    return [rowId, colId];
+  };
 
   const findRandomCoordinates = (): number[] => {
     const randomRow = Math.floor(Math.random() * size);
@@ -132,63 +176,29 @@ const Game = ({ size, level }: GameProps) => {
 
     return [randomRow, randomCol];
   };
-  //////// ERROR HANDLING END ////////
 
-  //////// VALIDATION START ////////
-  const invalidSquare = (rowId: number, colId: number) => {
-    return rowId < 0 || rowId >= size || colId < 0 || colId >= size;
-  };
-
-  const squareIsOccupied = (rowId: number, colId: number) => {
-    const occupied = snake.some((coordinates) => {
-      return coordinates[0] === rowId && coordinates[1] === colId;
-    });
-
-    return occupied || (brain[0] === rowId && brain[1] === colId);
-  };
-
-  const squaresAreTheSame = (
-    snakeRow: number,
-    snakeCol: number,
-    brainRow: number,
-    brainCol: number
-  ) => {
-    return snakeRow === brainRow && snakeCol === brainCol;
-  };
-
-  const validDirection = (snakeRow: number, snakeCol: number) => {
-    const [brainRow, brainCol] = brain;
-    const sameAsBrain = squaresAreTheSame(
-      snakeRow,
-      snakeCol,
-      brainRow,
-      brainCol
-    );
-    const invalid = invalidSquare(snakeRow, snakeCol);
-
-    return !sameAsBrain && !invalid;
-  };
-  //////// ERROR HANDLING END ////////
-
-  //////// UI UPDATE START ////////
   const findSquareElement = (rowId: number, colId: number) => {
     const selector = `[data-row-id='${rowId}'][data-col-id='${colId}']`;
-    if (board.current) {
-      return board.current.querySelector(selector);
+    if (boardRef.current) {
+      return boardRef.current.querySelector(selector);
     } else {
       return;
     }
   };
 
   const findSnakeElements = (updatedSnake: number[][]): Element[] => {
-    return updatedSnake.map((coordinates) => {
-      const square = findSquareElement(coordinates[0], coordinates[1]);
-      if (!square) {
-        handleCustomError(`Square not found at row ${coordinates[0]}, col ${coordinates[1]}`);
-      }
-      return square as Element;
-    }).filter(Boolean);
-  };  
+    return updatedSnake
+      .map((coordinates) => {
+        const square = findSquareElement(coordinates[0], coordinates[1]);
+        if (!square) {
+          handleCustomError(
+            `Square not found at row ${coordinates[0]}, col ${coordinates[1]}`
+          );
+        }
+        return square as Element;
+      })
+      .filter(Boolean);
+  };
 
   const addSnakeElementClasses = (snakeElements: Element[]) => {
     if (!snakeElements) handleCustomError("Invalid snake element collection");
@@ -224,56 +234,71 @@ const Game = ({ size, level }: GameProps) => {
 
   const changeDirection = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const keyPressed = e.key;
-    const [rowId, colId] = snake[0];
+    const [rowId, colId] = snakeRef.current[0];
 
     switch (keyPressed) {
       case "ArrowUp":
         if (invalidSquare(rowId - 1, colId)) return;
         setDirection("UP");
-        moveSnake(rowId - 1, colId);
         break;
       case "ArrowDown":
         if (invalidSquare(rowId + 1, colId)) return;
         setDirection("DOWN");
-        moveSnake(rowId + 1, colId);
         break;
       case "ArrowRight":
         if (invalidSquare(rowId, colId + 1)) return;
         setDirection("RIGHT");
-        moveSnake(rowId, colId + 1);
         break;
       case "ArrowLeft":
         if (invalidSquare(rowId, colId - 1)) return;
         setDirection("LEFT");
-        moveSnake(rowId, colId - 1);
         break;
       default:
         return;
     }
   };
 
-  const moveSnake = (rowId: number, colId: number) => {
-    const newHead = findSquareElement(rowId, colId);
-    if (!newHead) handleCustomError("Could not find valid head element");
-
-    const updatedSnake = [[rowId, colId], ...snake];
-    const snakeElements = findSnakeElements(updatedSnake);
-    if (!snakeElements.length) {
-      handleCustomError("Error collection the snake elements");
+  const squareIsOnSnake = (snakeRow: number, snakeCol: number): boolean => {
+    for (let i = 0; i < snakeRef.current.length; i++) {
+      if (snakeRef.current[i][0] === snakeRow && snakeRef.current[i][1] === snakeCol) {
+        return true;
+      }
     }
-    removeSnakeElementClasses(snakeElements);
+    return false;
+  }
 
-    if (squaresAreTheSame(rowId, colId, brain[0], brain[1])) {
+  const moveSnake = () => {
+    const [nextRowId, nextColId] = findNextCoordinates(); 
+    const nextHead = findSquareElement(nextRowId, nextColId);
+
+    // console.log("nextRowId:", nextRowId, "nextColId:", nextColId, nextHead)
+    if (!nextHead) {
+      // change directions and check again
+      // game over if no other options
+    }
+
+    const nextSnake = [[nextRowId, nextColId], ...snakeRef.current];
+    const nextSnakeElements = findSnakeElements(nextSnake);
+
+    removeSnakeElementClasses(nextSnakeElements);
+
+    if (squaresAreTheSame(nextRowId, nextColId)) {
       brainGetsEaten();
-    } else if (false) {
-      // if the snake is attempting to move into itself, run this branch
+      // console.log('moveSnake func - if branch');
+    } else if (squareIsOnSnake(nextRowId, nextColId)) {
+      // if the snake is attempting to move into itself,
+      // run this branch
+      // game over 
+      console.log('moveSnake func - else if branch');
+      setGameActive(false);
     } else {
-      updatedSnake.pop();
-      snakeElements.pop();
+      // console.log('moveSnake func - else branch');
+      nextSnake.pop();
+      nextSnakeElements.pop();
     }
 
-    addSnakeElementClasses(snakeElements);
-    setSnake(updatedSnake);
+    addSnakeElementClasses(nextSnakeElements);
+    snakeRef.current = nextSnake;
   };
   //////// GAME MOVEMENT END ////////
 
@@ -298,7 +323,7 @@ const Game = ({ size, level }: GameProps) => {
       </div>
 
       <div
-        ref={board}
+        ref={boardRef}
         id="boardContainer"
         tabIndex={0}
         onKeyDown={changeDirection}
