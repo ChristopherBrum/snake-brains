@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
-import Board from "./components/Board/Board";
+import Board from "./components/Game/Game";
 import Instruction from "./components/Instruction/Instruction";
 
 function App() {
