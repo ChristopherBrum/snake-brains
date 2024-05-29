@@ -10,13 +10,15 @@ const Instruction = ({ setInstructions }: InstructionProps) => {
   return (
     <div id={styles.wrapper} onClick={() => setInstructions(false)}>
       <div id={styles.text}>
-        <img
-          id={styles.snakeHeadshot}
-          src={snake}
-          alt="Snake Plisskken's head"
-        />
-        <h1 id={styles.title}>SNAKE</h1>
-        <div id={styles.subtitle}>on the Brain</div>
+        <div id={styles.headerWrapper}>
+          <img
+            id={styles.snakeHeadshot}
+            src={snake}
+            alt="Snake Plisskken's head"
+          />
+          <h1 id={styles.title}>SNAKE</h1>
+          <div id={styles.subtitle}>on the Brain</div>
+        </div>
         <p className={styles.paragraph}>
           Alright, listen up. I'm Snake Plissken, but not like you've seen
           before. This ain't your typical run-of-the-mill Snake game. No, in
@@ -31,7 +33,7 @@ const Instruction = ({ setInstructions }: InstructionProps) => {
           I get. But don't get too cocky. One wrong turn and it's game over.
         </p>
         <p className={styles.paragraph}>
-          You're navigating a deadly grid, avoiding traps and obstacles. It's a
+          You're navigating a deadly grid, avoiding dangers and obstacles, especially my slithering snake butt. It's a
           fight for survival in a post-apocalyptic hellscape, and I need those
           brains to keep moving. You see, this mutation isn't just a curse -
           it's my only weapon. I move fast, and you've gotta think faster.

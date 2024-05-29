@@ -13,13 +13,28 @@
 @keyframes scaleUp {
   from {
     transform: scale(0);
+		opacity: 0;
   }
   to {
     transform: scale(1);
+		opacity: 1;
+  }
+}
+
+@keyframes growIn {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    opacity: 1;
   }
 }
 
 #boardContainer {
+	position: relative;
+	z-index: -1000;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -41,11 +56,12 @@
   margin-bottom: 30px;
 }
 
-.brainsEatenBox {
+.gameStateWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin: 0 30px;
+	animation: growIn 1s ease-out forwards;
 }
 
 #difficultyLabel,

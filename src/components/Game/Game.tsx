@@ -13,16 +13,16 @@ const MS_CHANGE_PER_LEVEL = 35;
 type GameProps = {
   size: number;
   level: number;
+  setGameStart: (bool: boolean) => void;
 };
 
-const Game = ({ size, level }: GameProps) => {
+const Game = ({ size, level, setGameStart }: GameProps) => {
   const [brain, setBrain] = useState<number[]>([]);
   const [brainsEaten, setBrainsEaten] = useState<number>(0);
   const [currentLevel, setCurrentLevel] = useState<number>(level);
   const [direction, setDirection] = useState<string>("");
   const [gameActive, setGameActive] = useState<boolean>(false);
   const [gameMode, setGameMode] = useState("start");
-  const [score] = useState<number>(0);
 
   const snakeRef = useRef<number[][]>([]);
   const boardRef = useRef<HTMLDivElement>(null);
@@ -334,11 +334,11 @@ const Game = ({ size, level }: GameProps) => {
   return (
     <>
       <div id={styles.brainsEatenWrapper}>
-        <div className={styles.brainsEatenBox}>
+        <div className={styles.gameStateWrapper}>
           <span id={styles.difficultyLabel}>Difficulty:</span>
           <span id={styles.level}>{currentLevel}</span>
         </div>
-        <div className={styles.brainsEatenBox}>
+        <div className={styles.gameStateWrapper}>
           <div id={styles.flexy}>
             <img
               id={styles.brainImage}
@@ -352,7 +352,11 @@ const Game = ({ size, level }: GameProps) => {
       </div>
 
       {gameMode === "player-lost" ? (
-        <LostModal score={score} brainsEaten={brainsEaten} />
+        <LostModal
+          currentLevel={currentLevel}
+          brainsEaten={brainsEaten}
+          setGameStart={setGameStart}
+        />
       ) : null}
       <div
         ref={boardRef}

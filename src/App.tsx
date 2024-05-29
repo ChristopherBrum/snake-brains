@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import Header from "./components/Header/Header";
-import Controls from "./components/Controls/Controls";
+import Menu from "./components/Menu/Menu.tsx";
 import Game from "./components/Game/Game.tsx";
 import Instruction from "./components/Instruction/Instruction";
 
@@ -11,7 +11,7 @@ function App() {
   const [gameStart, setGameStart] = useState<boolean>(false);
   const [instructions, setInstructions] = useState<boolean>(false);
 
-  const handleStartGame = () => {
+  const handleGameStart = () => {
     setGameStart(true);
   };
 
@@ -23,14 +23,14 @@ function App() {
     <>
       <Header />
       {gameStart ? (
-        <Game size={size} level={level} />
+        <Game size={size} level={level} setGameStart={setGameStart} />
       ) : (
-        <Controls
+        <Menu
           size={size}
           setSize={setSize}
           level={level}
           setLevel={setLevel}
-          handleStartGame={handleStartGame}
+          handleGameStart={handleGameStart}
           setInstructions={setInstructions}
         />
       )}

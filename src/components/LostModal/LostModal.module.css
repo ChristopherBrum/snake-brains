@@ -22,6 +22,7 @@
 
 #gameOverWrapper {
   position: absolute;
+	z-index: 1;
   top: 0;
   left: 0;
   width: 100vw;
@@ -32,7 +33,7 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.85);
   font-family: "Gloomy";
-  font-size: 3rem;
+  font-size: 2rem;
   color: var(--yellow-main);
   animation: scaleUp 0.9s ease forwards;
 }
@@ -43,29 +44,25 @@
 }
 
 #title {
-  font-size: 8rem;
+  font-size: 6rem;
   color: var(--red-main);
 }
 
 .text {
-  font-size: 4rem;
+  font-size: 3.5rem;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 750px) {
   #gameOverWrapper {
     font-size: 2rem;
   }
 
-  #headshot {
-    width: 200px;
-  }
-
   #title {
-    font-size: 6rem;
+    font-size: 4.25rem;
   }
 
   .text {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
 }
 
@@ -79,7 +76,7 @@
   }
 
   #title {
-    font-size: 4rem;
+    font-size: 3.5rem;
   }
 
   .text {

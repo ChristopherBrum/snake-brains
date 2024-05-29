@@ -26,6 +26,7 @@
   align-items: center;
 	font-family: 'Gloomy';
 	font-size: 1.8rem;
+  margin-top: 100px;
 }
 
 .rangeContainer {
@@ -67,8 +68,10 @@ input[type="range"] {
   animation: slideInFromRight ease-out 1s;
 }
 
-@media screen and (max-width: 800px) {
-  
+@media screen and (max-height: 980px) {
+  .container {
+    margin-top: 0;  
+  } 
 }
 
 @media screen and (max-width: 525px) {

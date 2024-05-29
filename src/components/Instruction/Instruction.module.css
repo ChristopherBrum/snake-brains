@@ -23,6 +23,11 @@
 	animation: scaleUp 0.9s ease forwards;
 }
 
+#headerWrapper {
+	display: flex;
+	align-items: center;
+}
+
 #text {
 	font-family: 'Gloomy';
 	font-size: 1.4rem;
@@ -60,7 +65,7 @@
 }
 
 #snakeHeadshot {
-	height: 350px;
+	height: 300px;
 	float: left;
 	margin: 0;
 }
@@ -88,14 +93,14 @@
 	}
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 800px) {
 	#text {
 		display: flex;
 		flex-direction: column;
 	}
 
 	#snakeHeadshot {
-		height: auto;
+		height: 250px;
 		width: auto;
 		align-self: center;
 	}
