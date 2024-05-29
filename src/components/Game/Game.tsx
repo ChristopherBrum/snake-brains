@@ -2,10 +2,13 @@
 import { useState, useRef, useEffect } from "react";
 import brainImage from "../../assets/brain.png";
 import useInterval from "../useInterval/useInterval";
+import LostModal from "../LostModal/LostModal";
 
-const BASELINE_MOVEMENT_INTERVAL = 500;
+import styles from "./Game.module.css";
+
+const BASELINE_MOVEMENT_INTERVAL = 400;
 const BRAINS_FOR_LEVEL_UP = 10;
-const MS_CHANGE_PER_LEVEL = 45;
+const MS_CHANGE_PER_LEVEL = 35;
 
 type GameProps = {
   size: number;
@@ -14,11 +17,12 @@ type GameProps = {
 
 const Game = ({ size, level }: GameProps) => {
   const [brain, setBrain] = useState<number[]>([]);
-  const [direction, setDirection] = useState<string>("");
-  const [score, setScore] = useState<number>(0);
-  const [gameActive, setGameActive] = useState<boolean>(false);
+  const [brainsEaten, setBrainsEaten] = useState<number>(0);
   const [currentLevel, setCurrentLevel] = useState<number>(level);
-  const [gameOver, setGameOver] = useState<string>("beforeGame");
+  const [direction, setDirection] = useState<string>("");
+  const [gameActive, setGameActive] = useState<boolean>(false);
+  const [gameMode, setGameMode] = useState("start");
+  const [score] = useState<number>(0);
 
   const snakeRef = useRef<number[][]>([]);
   const boardRef = useRef<HTMLDivElement>(null);
@@ -93,17 +97,19 @@ const Game = ({ size, level }: GameProps) => {
 
   /* useEffect to update the difficulty level based on number of brains eaten */
   useEffect(() => {
-    if (score % BRAINS_FOR_LEVEL_UP === 0) {
-      const additionalLevels = score / BRAINS_FOR_LEVEL_UP;
+    if (brainsEaten % BRAINS_FOR_LEVEL_UP === 0) {
+      const additionalLevels = brainsEaten / BRAINS_FOR_LEVEL_UP;
       const newCurrentLevel = level + additionalLevels;
       setCurrentLevel(newCurrentLevel);
     }
-  }, [score]);
+  }, [brainsEaten]);
 
   /* use the custom useInterval hook to move the snake */
   useInterval({
     callback: moveSnake,
-    delay: gameActive ? BASELINE_MOVEMENT_INTERVAL - currentLevel * MS_CHANGE_PER_LEVEL : null,
+    delay: gameActive
+      ? BASELINE_MOVEMENT_INTERVAL - currentLevel * MS_CHANGE_PER_LEVEL
+      : null,
   });
   //////// GAME SETUP END ////////
 
@@ -120,7 +126,7 @@ const Game = ({ size, level }: GameProps) => {
     const invalid = invalidSquare(currentRow, currentCol);
     const occupiedBySnake = squareOccupiedBySnake(currentRow, currentCol);
     return !invalid && !occupiedBySnake;
-  }
+  };
 
   const squareIsOccupied = (rowId: number, colId: number) => {
     const occupied = squareOccupiedBySnake(rowId, colId);
@@ -156,8 +162,6 @@ const Game = ({ size, level }: GameProps) => {
 
     return !sameAsBrain && !invalid;
   };
-
-
   //////// ERROR HANDLING END ////////
 
   //////// DOM MANIPULATION START ////////
@@ -241,7 +245,7 @@ const Game = ({ size, level }: GameProps) => {
     }
     brainTarget.classList.add("brain");
     setBrain([brainRow, brainCol]);
-    setScore(score + 1);
+    setBrainsEaten(brainsEaten + 1);
   };
 
   const changeDirection = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -271,19 +275,19 @@ const Game = ({ size, level }: GameProps) => {
   };
 
   const findAnotherPath = (currentRow: number, currentCol: number) => {
-    if (validSquare(currentRow - 1, currentCol) ) {
+    if (validSquare(currentRow - 1, currentCol)) {
       setDirection("UP");
       return [currentRow - 1, currentCol];
-    } else if (validSquare(currentRow + 1, currentCol) ) {
+    } else if (validSquare(currentRow + 1, currentCol)) {
       setDirection("DOWN");
       return [currentRow + 1, currentCol];
-    } else if (validSquare(currentRow, currentCol - 1) ) {
+    } else if (validSquare(currentRow, currentCol - 1)) {
       setDirection("LEFT");
       return [currentRow, currentCol - 1];
-    } else if (validSquare(currentRow, currentCol + 1) ) {
+    } else if (validSquare(currentRow, currentCol + 1)) {
       setDirection("RIGHT");
       return [currentRow, currentCol + 1];
-    } 
+    }
     return null;
   };
 
@@ -297,8 +301,7 @@ const Game = ({ size, level }: GameProps) => {
       if (validPath) {
         [nextRowId, nextColId] = validPath;
       } else {
-        console.log("nowhere to turn, line 305");
-        setGameActive(false);
+        playerLost();
       }
     }
 
@@ -309,15 +312,9 @@ const Game = ({ size, level }: GameProps) => {
 
     if (squaresAreTheSame(nextRowId, nextColId)) {
       brainGetsEaten();
-      // console.log('moveSnake func - if branch');
     } else if (squareIsOnSnake(nextRowId, nextColId)) {
-      // if the snake is attempting to move into itself,
-      // run this branch
-      // game over
-      console.log("moveSnake func - else if branch");
-      setGameActive(false);
+      playerLost();
     } else {
-      // console.log('moveSnake func - else branch');
       nextSnake.pop();
       nextSnakeElements.pop();
     }
@@ -328,28 +325,38 @@ const Game = ({ size, level }: GameProps) => {
   //////// GAME MOVEMENT END ////////
 
   //////// GAME OVER START ////////
-
+  const playerLost = () => {
+    setGameActive(false);
+    setGameMode("player-lost");
+  };
   //////// GAME OVER END ////////
 
   return (
     <>
-      <div id="score-wrapper">
-        <div className="score-box">
-          <span id="difficulty-label">Difficulty:</span>
-          <span id="level">{currentLevel}</span>
+      <div id={styles.brainsEatenWrapper}>
+        <div className={styles.brainsEatenBox}>
+          <span id={styles.difficultyLabel}>Difficulty:</span>
+          <span id={styles.level}>{currentLevel}</span>
         </div>
-        <div className="score-box">
-          <div id="flexy">
-            <img id="brain-image" src={brainImage} alt="Image of a brain" />
-            <span id="brains-eaten-label">'s eaten:</span>
+        <div className={styles.brainsEatenBox}>
+          <div id={styles.flexy}>
+            <img
+              id={styles.brainImage}
+              src={brainImage}
+              alt="Image of a brain"
+            />
+            <span id={styles.brainsEatenLabel}>'s eaten:</span>
           </div>
-          <span id="score">{score}</span>
+          <span id={styles.brainsEaten}>{brainsEaten}</span>
         </div>
       </div>
 
+      {gameMode === "player-lost" ? (
+        <LostModal score={score} brainsEaten={brainsEaten} />
+      ) : null}
       <div
         ref={boardRef}
-        id="boardContainer"
+        id={styles.boardContainer}
         tabIndex={0}
         onKeyDown={changeDirection}
       ></div>
