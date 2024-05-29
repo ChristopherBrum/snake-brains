@@ -1,0 +1,85 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+#gameOverContainer {
+  animation: fadeIn 0.5s ease;
+}
+
+#gameOverWrapper {
+  position: absolute;
+	z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.85);
+  font-family: "Gloomy";
+  font-size: 2rem;
+  color: var(--yellow-main);
+  animation: scaleUp 0.9s ease forwards;
+}
+
+#headshot {
+  width: 350px;
+  animation: rotateImage 3s infinite;
+}
+
+#title {
+  font-size: 6rem;
+  color: var(--red-main);
+}
+
+.text {
+  font-size: 3.5rem;
+}
+
+@media screen and (max-width: 750px) {
+  #gameOverWrapper {
+    font-size: 2rem;
+  }
+
+  #title {
+    font-size: 4.25rem;
+  }
+
+  .text {
+    font-size: 2.5rem;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #gameOverWrapper {
+    font-size: 1.5rem;
+  }
+
+  #headshot {
+    width: 150px;
+  }
+
+  #title {
+    font-size: 3.5rem;
+  }
+
+  .text {
+    font-size: 1.75rem;
+  }
+}

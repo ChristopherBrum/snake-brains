@@ -1,17 +1,12 @@
-.gameStartButton {
-  margin-top: 40px;
-  padding: 10px 30px;
-  background-color: var(--red-main);
-  color: white;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-	transition: all 0.3s ease;;
-}
-
-.gameStartButton:hover {
-  background-color: var(--red-secondary);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow);
+  }
+  to {
+    opacity: 1;
+    box-shadow: 0 0 20px var(--red-glow), 0 0 20px var(--red-glow);
+  }
 }
 
 @keyframes pulsate {
@@ -30,5 +25,32 @@
 }
 
 .gameStartButton {
-	animation: pulsate 1.5s infinite;
+  margin-top: 40px;
+  padding: 10px 30px;
+  background-color: var(--red-main);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.3s ease;
+  animation: fadeIn 1.5s ease-out, pulsate 1.5s infinite ease-in-out;
+}
+
+.gameStartButton:hover {
+  background-color: var(--red-secondary);
+}
+
+@media screen and (max-width: 800px) {
+  .gameStartButton {
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (max-width: 525px) {
+  .gameStartButton {
+    margin-top: 40px;
+    padding: 10px 30px;
+    font-size: 1.3rem;
+  }
 }

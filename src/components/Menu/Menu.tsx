@@ -1,27 +1,26 @@
-import styles from "./Controls.module.css";
+import styles from "./Menu.module.css";
 import Button from "../Button/Button";
 
-interface ControlProps {
+interface MenuProps {
   size: number;
   setSize: (size: number) => void;
   level: number;
   setLevel: (level: number) => void;
-  handleStartGame: () => void;
-	setInstructions: (bool: boolean) => void;
+  handleGameStart: () => void;
+  setInstructions: (bool: boolean) => void  ;
 }
 
-const Controls = ({
+const Menu = ({
   size,
   setSize,
   level,
   setLevel,
-  handleStartGame,
-	setInstructions,
-}: ControlProps) => {
-
-	const showInstructions = () => {
-		setInstructions(true);
-	}
+  handleGameStart,
+  setInstructions,
+}: MenuProps) => {
+  const showInstructions = () => {
+    setInstructions(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -57,9 +56,9 @@ const Controls = ({
           </label>
         </div>
       </div>
-      <Button title={"Start Game"} clickHandler={handleStartGame} />
+      <Button title={"Start Game"} clickHandler={handleGameStart} />
     </div>
   );
 };
 
-export default Controls;
+export default Menu;
