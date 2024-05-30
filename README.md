@@ -6,6 +6,10 @@
 
 <img src="src/assets/snake.png" alt="Snake Plissken" width="300">
 
+## Play
+
+[Follow this link to play!](https://cbrum.dev/snake-brains/)
+
 ## Introduction
 
 Welcome to the Snake game starring Snake Plissken, the legendary anti-hero from the Escape movies! In this unique take on the classic Snake game, you'll control Snake Plissken as he navigates a post-apocalyptic landscape, devouring brains to grow longer and score higher. Each brain consumed not only extends Snake's length but also increases the difficulty of the game, providing a thrilling challenge.
