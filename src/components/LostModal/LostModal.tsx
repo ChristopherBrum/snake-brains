@@ -25,20 +25,27 @@ const LostModal = ({
   };
 
   const calculateScore = () => {
-    const baseMultiplier = 1.5;
-    const startingDifficultyLevel = currentLevel - Math.floor(brainsEaten / 10);
-    const initialBonus = 20 * (startingDifficultyLevel - 1);
-    return Math.floor(Math.pow(baseMultiplier, currentLevel) + initialBonus);
+    let total = 0;
+    const startingLevel = Math.max(
+      1,
+      currentLevel - Math.floor(brainsEaten / 10)
+    );
+    const initialBonus = 100 * (startingLevel - 1);
+
+    for (let i = 1; i <= brainsEaten; i++) {
+      const levelIncrease = Math.floor(i / 10);
+      total += ((startingLevel + levelIncrease) * 100);
+    }
+
+    return total + initialBonus;
   };
 
   return (
     <div id={styles.gameOverContainer}>
       <div id={styles.gameOverWrapper}>
-				<h2 id={styles.title}>Ssssee you in hell</h2>
+        <h2 id={styles.title}>Ssssee you in hell</h2>
         <p className={styles.text}>Brains Eaten: {brainsEaten}</p>
-        <p className={styles.text}>
-          Final Score: {finalScore}
-        </p>
+        <p className={styles.text}>Final Score: {finalScore}</p>
         <Button title={"Play Again?"} clickHandler={newGame} />
       </div>
     </div>
