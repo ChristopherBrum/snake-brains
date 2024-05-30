@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from "react";
 import brainImage from "../../assets/brain.png";
 import useInterval from "../useInterval/useInterval";
 import LostModal from "../LostModal/LostModal";
-
 import styles from "./Game.module.css";
 
 const BASELINE_MOVEMENT_INTERVAL = 400;
