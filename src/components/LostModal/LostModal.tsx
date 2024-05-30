@@ -28,7 +28,7 @@ const LostModal = ({
     const baseMultiplier = 1.5;
     const startingDifficultyLevel = currentLevel - Math.floor(brainsEaten / 10);
     const initialBonus = 20 * (startingDifficultyLevel - 1);
-    return Math.pow(baseMultiplier, currentLevel) + initialBonus;
+    return Math.floor(Math.pow(baseMultiplier, currentLevel) + initialBonus);
   };
 
   return (
