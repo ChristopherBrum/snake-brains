@@ -8,7 +8,7 @@ type InstructionProps = {
 
 const Instruction = ({ setInstructions }: InstructionProps) => {
   return (
-    <div id={styles.wrapper} onClick={() => setInstructions(false)}>
+    <div data-testid="wrapper" id={styles.wrapper} onClick={() => setInstructions(false)}>
       <div id={styles.text}>
         <div id={styles.headerWrapper}>
           <img
@@ -16,9 +16,11 @@ const Instruction = ({ setInstructions }: InstructionProps) => {
             src={snake}
             alt="Snake Plisskken's head"
           />
-          <h1 id={styles.title}>SNAKE</h1>
-          <div id={styles.subtitle}>on the Brain</div>
+          <div id={styles.titleWrapper}>
+            <h1 id={styles.title}>SNAKE</h1>
+            <div id={styles.subtitle}>on the Brain</div>
         </div>
+          </div>
         <p className={styles.paragraph}>
           Alright, listen up. I'm Snake Plissken, but not like you've seen
           before. This ain't your typical run-of-the-mill Snake game. No, in
