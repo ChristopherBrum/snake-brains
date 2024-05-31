@@ -1,5 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import Header from "./Header";
+import Header from "../components/Header/Header";
+
+jest.mock("/src/assets/snake.png", () => "snake.png");
 
 describe("Header Component", () => {
   test("renders the header with an image, title, and subtitle", () => {

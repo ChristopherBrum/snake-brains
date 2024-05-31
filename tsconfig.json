@@ -6,7 +6,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    "types": ["node", "jest", "@testing-library/jest-dom"],
+    "types": ["node", "jest", "@testing-library/jest-dom", "vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -25,7 +25,7 @@
     //absolute import
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
+      "/src/*": ["src/*"]
     }
   },
   "include": ["src"],

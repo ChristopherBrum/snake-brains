@@ -358,6 +358,7 @@ const Game = ({ size, level, setGameStart }: GameProps) => {
         />
       ) : null}
       <div
+        role="grid"
         ref={boardRef}
         id={styles.boardContainer}
         tabIndex={0}
